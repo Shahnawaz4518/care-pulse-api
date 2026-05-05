@@ -2,7 +2,7 @@
 
 
 
-<img src="../assest/image.png">
-<img src="../assest/3 Layer Architecture.png">
-<img src="../assest/Transaction ex.png">
+<img src="../hospitalManagement/assest/image.png">
+<img src="../hospitalManagement/assest/3 Layer Architecture.png">
+<img src="../hospitalManagement/assest/Transaction ex.png">
 
