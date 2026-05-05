@@ -10,6 +10,8 @@ import com.devshahnawaz.hospitalManagement.entity.Patient;
 import com.devshahnawaz.hospitalManagement.repository.PatientRepository;
 import com.devshahnawaz.hospitalManagement.service.PatientService;
 
+// For Output testing Purpuse
+
 @SpringBootTest
 public class PatientTest {
 
