@@ -54,7 +54,7 @@ public class Patient {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime craetedAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     private BloodGroupType bloodGroup;

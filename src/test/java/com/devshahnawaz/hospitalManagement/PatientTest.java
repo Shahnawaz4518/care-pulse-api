@@ -1,5 +1,6 @@
 package com.devshahnawaz.hospitalManagement;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,15 @@ public class PatientTest {
 
     @Test
     public void testTransactionMethods(){
-        Patient patient = patientService.getPatientById(1L);
+        // Patient patient = patientService.getPatientById(1L);
+
+        // Patient patient = patientRepository.findByName("Priya Verma");
+
+        // List<Patient> patientList = patientRepository.findByBirthDateOrEmail(LocalDate.of(1993,02, 10),"kavita.nair@gmail.com");
+        List<Patient> patientList = patientRepository.findByNameContainingOrderByIdDesc("h");
+        
+        for(Patient patient: patientList){
         System.out.println(patient);
     }
-
+  }
 }
