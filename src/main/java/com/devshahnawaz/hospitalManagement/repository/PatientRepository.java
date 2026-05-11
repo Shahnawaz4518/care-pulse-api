@@ -27,4 +27,10 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query("select p from Patient p where p.birthDate > :birthDate")
     List<Patient> findByBornAfterDate(@Param("birthDate")LocalDate birthDate);
+
+    @Query("select p.bloodGroup, Count(p) from Patient p group by p.bloodGroup")
+    List<Object[]> countEachBloodGroupType();
+
+    @Query(value = "select * from patient", nativeQuery = true)
+    List<Patient> findAllPatients();
 }

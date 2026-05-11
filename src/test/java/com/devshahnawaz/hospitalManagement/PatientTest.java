@@ -62,5 +62,12 @@ public class PatientTest {
         for (Patient patient : patientList) {
             System.out.println(patient);
         }
+
+        List<Object[]> bloodGroupList = patientRepository.countEachBloodGroupType();
+        for(Object[] objects: bloodGroupList){
+            System.out.println(objects[0] +" "+ objects[1]);
+        }
+
+        List<Patient> patients = patientRepository.findAllPatients();
     }
 }
