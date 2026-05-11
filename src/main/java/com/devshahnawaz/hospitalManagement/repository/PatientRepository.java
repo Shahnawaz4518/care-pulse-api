@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.devshahnawaz.hospitalManagement.dto.BloodGroupCountResponseEntity;
 import com.devshahnawaz.hospitalManagement.entity.Patient;
 import com.devshahnawaz.hospitalManagement.entity.type.BloodGroupType;
 
@@ -62,8 +63,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     // JPQL: aggregate query – counts patients grouped by each blood group type
     // Returns List<Object[]> because the result is not a full entity (scalar
     // projection)
-    @Query("SELECT p.bloodGroup, COUNT(p) FROM Patient p GROUP BY p.bloodGroup")
-    List<Object[]> countEachBloodGroupType();
+    @Query("SELECT new com.devshahnawaz.hospitalManagement.dto.BloodGroupCountResponseEntity(p.bloodGroup, COUNT(p)) FROM Patient p GROUP BY p.bloodGroup")
+    // List<Object[]> countEachBloodGroupType();
+    List<BloodGroupCountResponseEntity> countEachBloodGroupType();
 
     // ─────────────────────────────────────────────────────────────
     // ③ NATIVE SQL (@Query with nativeQuery = true)

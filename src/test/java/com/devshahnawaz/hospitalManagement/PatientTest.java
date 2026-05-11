@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.devshahnawaz.hospitalManagement.dto.BloodGroupCountResponseEntity;
 import com.devshahnawaz.hospitalManagement.entity.Patient;
 import com.devshahnawaz.hospitalManagement.entity.type.BloodGroupType;
 import com.devshahnawaz.hospitalManagement.repository.PatientRepository;
@@ -87,22 +88,22 @@ public class PatientTest {
         // Uses Patient class name and Java field names (bloodGroup, birthDate).
 
         // JPQL: SELECT p FROM Patient p WHERE p.bloodGroup = ?1
-        // List<Patient> patientList =
-        // patientRepository.findByBloodGroup(BloodGroupType.A_POSITIVE);
-        // for (Patient patient : patientList) { System.out.println(patient); }
+        List<Patient> patientList =
+        patientRepository.findByBloodGroup(BloodGroupType.A_POSITIVE);
+        for (Patient patient : patientList) { System.out.println(patient); }
 
         // JPQL: SELECT p FROM Patient p WHERE p.birthDate > :birthDate
-        List<Patient> patientList = patientRepository.findByBornAfterDate(LocalDate.of(1993, 1, 15));
-        for (Patient patient : patientList) {
-            System.out.println(patient);
-        }
+        // List<Patient> patientList = patientRepository.findByBornAfterDate(LocalDate.of(1993, 1, 15));
+        // for (Patient patient : patientList) {
+        //     System.out.println(patient);
+        // }
 
         // JPQL: SELECT p.bloodGroup, COUNT(p) FROM Patient p GROUP BY p.bloodGroup
         // Returns Object[] because result is a projection (not a full entity)
-        List<Object[]> bloodGroupList = patientRepository.countEachBloodGroupType();
-        for (Object[] objects : bloodGroupList) {
-            System.out.println(objects[0] + " → count: " + objects[1]);
-        }
+        // List<Object[]> bloodGroupList = patientRepository.countEachBloodGroupType();
+        // for (Object[] objects : bloodGroupList) {
+        // System.out.println(objects[0] + " → count: " + objects[1]);
+        // }
 
         // ── Native SQL Query (nativeQuery = true) ─────────────────
         // Raw SQL against actual table name "patient", not the entity name.
@@ -122,5 +123,14 @@ public class PatientTest {
         // the first-level (session) cache → p1 == p2 prints 'true'.
         // Patient p = patientService.getPatientById(1L);
         // System.out.println(p);
+
+        // ── JPQL Projection Query (interface-based) ───────────────
+        // JPQL: SELECT p.bloodGroup, COUNT(p) FROM Patient p GROUP BY p.bloodGroup
+        // Returns BloodGroupCountResponseEntity projection (not a raw Object[]).
+        List<BloodGroupCountResponseEntity> bloodGroupList = patientRepository.countEachBloodGroupType();
+        for (BloodGroupCountResponseEntity bloodGroupCountResponse : bloodGroupList) {
+            System.out.println(bloodGroupCountResponse);
+        }
     }
+
 }
