@@ -2,6 +2,7 @@ package com.devshahnawaz.hospitalManagement.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -16,6 +17,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id; // Marks the primary key field
 import jakarta.persistence.Index; // Defines a DB index on table columns
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table; // Customizes the table name and constraints
 import jakarta.persistence.UniqueConstraint;
 // ───────────────────────────────────────────────────────────────────────────
@@ -92,5 +96,13 @@ public class Patient {
     // reordering)
     @Enumerated(EnumType.STRING)
     private BloodGroupType bloodGroup;
+
+
+    @OneToOne
+    @JoinColumn(name = "patient_insurance_id")
+    private Insurance insurance;
+
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointments;
 
 }
