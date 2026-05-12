@@ -3,6 +3,8 @@ package com.devshahnawaz.hospitalManagement.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -22,8 +24,7 @@ import jakarta.transaction.Transactional;
  * 1) JPA Derived Query Methods – method name parsed by Spring to build the
  * query automatically
  * 2) JPQL (@Query) – object-oriented query language using entity/field names
- * 3) Native SQL (@Query nativeQuery=true) – raw SQL against the actual
- * table/column names
+ * 3) Native SQL (nativeQuery) – raw SQL against the actual table/column names
  */
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
@@ -48,8 +49,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     // ─────────────────────────────────────────────────────────────
     // ② JPQL (@Query) – Java Persistence Query Language
-    // Uses entity class name (Patient) and field names (bloodGroup),
-    // NOT table/column names. Positional (?1) or named (:param).
+    // Uses entity class name (Patient) and Java field names,
+    // NOT table/column names. Supports positional (?1) or named (:param).
     // ─────────────────────────────────────────────────────────────
 
     // JPQL: positional parameter (?1) – finds patients matching a blood group
@@ -60,26 +61,24 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query("SELECT p FROM Patient p WHERE p.birthDate > :birthDate")
     List<Patient> findByBornAfterDate(@Param("birthDate") LocalDate birthDate);
 
-    // JPQL: aggregate query – counts patients grouped by each blood group type
-    // Returns List<Object[]> because the result is not a full entity (scalar
-    // projection)
+    // JPQL: constructor expression – counts patients grouped by each blood group
+    // Returns a typed projection instead of raw Object[].
     @Query("SELECT new com.devshahnawaz.hospitalManagement.dto.BloodGroupCountResponseEntity(p.bloodGroup, COUNT(p)) FROM Patient p GROUP BY p.bloodGroup")
-    // List<Object[]> countEachBloodGroupType();
     List<BloodGroupCountResponseEntity> countEachBloodGroupType();
 
     // ─────────────────────────────────────────────────────────────
     // ③ NATIVE SQL (@Query with nativeQuery = true)
     // Plain SQL against the actual DB table/column names.
-    // Useful for DB-specific syntax or complex queries JPQL can't express.
+    // Supports pagination via Pageable – returns a Page<Patient>.
     // ─────────────────────────────────────────────────────────────
 
-    // NATIVE: direct SQL – "*" maps result rows back to Patient entity
+    // NATIVE: raw SQL with pagination support
     @Query(value = "SELECT * FROM patient", nativeQuery = true)
-    List<Patient> findAllPatients();
+    Page<Patient> findAllPatients(Pageable pageable);
 
     // ─────────────────────────────────────────────────────────────
     // ④ JPQL UPDATE with @Modifying
-    // @Modifying marks the query as a DML statement (INSERT/UPDATE/DELETE).
+    // @Modifying marks the query as a DML statement (UPDATE/DELETE).
     // @Transactional is required so the change is committed to the DB.
     // ─────────────────────────────────────────────────────────────
 
