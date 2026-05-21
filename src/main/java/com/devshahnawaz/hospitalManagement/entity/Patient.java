@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import com.devshahnawaz.hospitalManagement.entity.type.BloodGroupType;
 
+import jakarta.persistence.CascadeType;
 // ─── JPA Core Imports ──────────────────────────────────────────────────────
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity; // Marks this class as a JPA entity (mapped to a DB table)
@@ -98,7 +99,7 @@ public class Patient {
     private BloodGroupType bloodGroup;
 
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "patient_insurance_id")
     private Insurance insurance;
 

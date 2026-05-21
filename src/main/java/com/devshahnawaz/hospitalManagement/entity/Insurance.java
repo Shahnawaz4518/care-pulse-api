@@ -1,5 +1,6 @@
 package com.devshahnawaz.hospitalManagement.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,12 +36,15 @@ public class Insurance {
     private String provider;
 
     @Column(nullable = false)
-    private String validUntil;
+    private LocalDate validUntil;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "insurance") // inverse side of the relationship (owning side)
+    // JPA: mappedBy = "insurance" means this is the INVERSE (non-owning) side.
+    // The OWNING side is Patient — it holds the @JoinColumn("patient_insurance_id") FK.
+    // Changes to this field are ignored by Hibernate; only Patient.insurance matters for DB writes.
+    @OneToOne(mappedBy = "insurance")
     private Patient patient;
 }
