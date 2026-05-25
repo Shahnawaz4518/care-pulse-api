@@ -2,6 +2,7 @@ package com.devshahnawaz.hospitalManagement.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -52,58 +53,58 @@ import lombok.ToString;
 // JPA: @Table lets you control the table name, unique constraints, and indexes
 // at the DB level
 @Table(name = "patient", uniqueConstraints = {
-        // JPA: UniqueConstraint – enforces DB-level uniqueness on email
-        @UniqueConstraint(name = "unique_patient_email", columnNames = { "email" }),
-        // JPA: Composite unique constraint – no two patients can share same name +
-        // birthDate
-        @UniqueConstraint(name = "unique_patient_name_birthdate", columnNames = { "name", "birthDate" })
+                // JPA: UniqueConstraint – enforces DB-level uniqueness on email
+                @UniqueConstraint(name = "unique_patient_email", columnNames = { "email" }),
+                // JPA: Composite unique constraint – no two patients can share same name +
+                // birthDate
+                @UniqueConstraint(name = "unique_patient_name_birthdate", columnNames = { "name", "birthDate" })
 }, indexes = {
-        // JPA: @Index – creates a DB index on birthDate for faster range queries
-        @Index(name = "idx_patient_birth_date", columnList = "birthDate")
+                // JPA: @Index – creates a DB index on birthDate for faster range queries
+                @Index(name = "idx_patient_birth_date", columnList = "birthDate")
 })
 public class Patient {
 
-    // JPA: @Id marks the primary key; @GeneratedValue(IDENTITY) = DB auto-increment
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+        // JPA: @Id marks the primary key; @GeneratedValue(IDENTITY) = DB auto-increment
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
 
-    // JPA: @Column(nullable=false, length=40) → NOT NULL VARCHAR(40) in DB
-    @Column(nullable = false, length = 40)
-    private String name;
+        // JPA: @Column(nullable=false, length=40) → NOT NULL VARCHAR(40) in DB
+        @Column(nullable = false, length = 40)
+        private String name;
 
-    // JPA: LocalDate is mapped to DATE type in DB by Hibernate automatically
-    private LocalDate birthDate;
+        // JPA: LocalDate is mapped to DATE type in DB by Hibernate automatically
+        private LocalDate birthDate;
 
-    // JPA: unique=true adds a UNIQUE constraint; nullable=false → NOT NULL
-    @Column(unique = true, nullable = false)
-    private String email;
+        // JPA: unique=true adds a UNIQUE constraint; nullable=false → NOT NULL
+        @Column(unique = true, nullable = false)
+        private String email;
 
-    // @ToString.Exclude – Lombok: omits this field from generated toString() output
-    @ToString.Exclude
-    private String gender;
+        // @ToString.Exclude – Lombok: omits this field from generated toString() output
+        @ToString.Exclude
+        private String gender;
 
-    // JPA / Hibernate: @CreationTimestamp – Hibernate sets this automatically on
-    // INSERT
-    // @Column(updatable=false) – prevents this field from being changed after
-    // creation
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
+        // JPA / Hibernate: @CreationTimestamp – Hibernate sets this automatically on
+        // INSERT
+        // @Column(updatable=false) – prevents this field from being changed after
+        // creation
+        @CreationTimestamp
+        @Column(updatable = false)
+        private LocalDateTime createdAt;
 
-    // JPA: @Enumerated(EnumType.STRING) – stores "A_POSITIVE", "B_NEGATIVE" etc. in
-    // DB
-    // (vs. EnumType.ORDINAL which stores an integer index – avoid, fragile to enum
-    // reordering)
-    @Enumerated(EnumType.STRING)
-    private BloodGroupType bloodGroup;
+        // JPA: @Enumerated(EnumType.STRING) – stores "A_POSITIVE", "B_NEGATIVE" etc. in
+        // DB
+        // (vs. EnumType.ORDINAL which stores an integer index – avoid, fragile to enum
+        // reordering)
+        @Enumerated(EnumType.STRING)
+        private BloodGroupType bloodGroup;
 
+        @OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST })
+        @JoinColumn(name = "patient_insurance_id")
+        private Insurance insurance;
 
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "patient_insurance_id")
-    private Insurance insurance;
-
-    @OneToMany(mappedBy = "patient")
-    private List<Appointment> appointments;
+        @OneToMany(mappedBy = "patient")
+        @ToString.Exclude
+        private List<Appointment> appointments = new ArrayList<>();
 
 }
