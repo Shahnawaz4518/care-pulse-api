@@ -16,3 +16,9 @@ VALUES
 -- FIX: The original file had a semicolon after row 8 ('Kavita Nair') which ended
 -- the INSERT early, making row 9 ('Aarav Sharma') a dangling/orphaned SQL fragment.
 -- Also fixed: Aarav's email was a duplicate of Kavita's (email has UNIQUE constraint).
+
+INSERT INTO doctor (name, specialization, email)
+VALUES
+    ('Dr. Rajesh Yadav', 'Cardiology', 'rajeshyadav@email.com'),
+    ('Dr. Sneha Gupta', 'Dermatology', 'snehaGupta@email.com'),
+    ('Dr. Amit Sharma', 'Neurology', 'amitSharma@email.com');
