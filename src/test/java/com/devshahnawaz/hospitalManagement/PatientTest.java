@@ -41,7 +41,7 @@ public class PatientTest {
     public void testPatientRepository() {
 
         // JPA: findAll() → SELECT * FROM patient (inherited from JpaRepository)
-        List<Patient> patientList = patientRepository.findAll();
+        List<Patient> patientList = patientRepository.findAllPatientWithAppointment();
         System.out.println(patientList);
 
         // JPA: save() → INSERT INTO patient (...) VALUES (...)
