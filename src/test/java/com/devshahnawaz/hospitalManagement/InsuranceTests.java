@@ -33,6 +33,10 @@ public class InsuranceTests {
         Patient patient = insuranceService.assignInsuranceToPatient(insurance, 1L);
 
         System.out.println(patient);
+
+        var newPatient = insuranceService.disassociateInsuranceFromPatient(patient.getId());
+
+        System.out.println(newPatient);
     }
 
     @Test

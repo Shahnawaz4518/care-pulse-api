@@ -19,9 +19,9 @@ public class InsuranceService {
     private final PatientRepository patientRepository;
 
     @Transactional
-    public Patient assignInsuranceToPatient(Insurance insurance, Long patientId){
+    public Patient assignInsuranceToPatient(Insurance insurance, Long patientId) {
         Patient patient = patientRepository.findById(patientId)
-        .orElseThrow(() -> new EntityNotFoundException("Patient Not Found With id: "+ patientId));
+                .orElseThrow(() -> new EntityNotFoundException("Patient Not Found With id: " + patientId));
 
         // FIX: Persist the transient Insurance entity first.
         // Without this, assigning a transient object to a managed entity causes
@@ -31,13 +31,22 @@ public class InsuranceService {
 
         // Assign the now-managed Insurance to the managed Patient.
         // Hibernate dirty-checking will automatically fire:
-        //   UPDATE patient SET patient_insurance_id = ? WHERE id = ?
+        // UPDATE patient SET patient_insurance_id = ? WHERE id = ?
         // at the end of the transaction — no explicit patientRepository.save() needed.
         patient.setInsurance(savedInsurance);
 
         // Maintain bi-directional in-memory consistency (inverse side — no DB effect).
         savedInsurance.setPatient(patient);
 
+        return patient;
+    }
+
+    @Transactional
+    public Patient disassociateInsuranceFromPatient(Long patientId) {
+        Patient patient = patientRepository.findById(patientId)
+                .orElseThrow(() -> new EntityNotFoundException("Patient not found with id: " + patientId));
+
+        patient.setInsurance(null);
         return patient;
     }
 }
