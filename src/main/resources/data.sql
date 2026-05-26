@@ -21,4 +21,5 @@ INSERT INTO doctor (name, specialization, email)
 VALUES
     ('Dr. Rajesh Yadav', 'Cardiology', 'rajeshyadav@email.com'),
     ('Dr. Sneha Gupta', 'Dermatology', 'snehaGupta@email.com'),
-    ('Dr. Amit Sharma', 'Neurology', 'amitSharma@email.com');
+    ('Dr. Amit Sharma', 'Neurology', 'amitSharma@email.com'),
+    ('Dr. Virat Kohli', 'Orthopaedics', 'viratKohli@email.com');

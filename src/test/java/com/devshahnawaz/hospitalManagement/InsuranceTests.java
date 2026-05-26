@@ -13,7 +13,6 @@ import com.devshahnawaz.hospitalManagement.entity.Patient;
 import com.devshahnawaz.hospitalManagement.service.AppoinmentService;
 import com.devshahnawaz.hospitalManagement.service.InsuranceService;
 
-
 @SpringBootTest
 public class InsuranceTests {
 
@@ -39,12 +38,16 @@ public class InsuranceTests {
     @Test
     public void testCreateAppoinment() {
         Appointment appointment = Appointment.builder()
-                .appointmentTime(LocalDateTime.of(2025, 11, 1, 14, 30))
+                .appointmentTime(LocalDateTime.of(2025, 11, 1, 14, 0, 0))
                 .reason("Cancer")
                 .build();
 
         var newAppointment = appointmeService.createNewAppointment(appointment, 1L, 2L);
 
         System.out.println(newAppointment);
+
+        var updatedAppointment = appointmeService.reAssignAppointmentToAnotherDoctor(newAppointment.getId(), 3L);
+
+        System.out.println(updatedAppointment);
     }
 }
