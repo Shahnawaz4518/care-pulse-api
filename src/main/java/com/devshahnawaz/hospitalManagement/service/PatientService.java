@@ -1,8 +1,15 @@
 package com.devshahnawaz.hospitalManagement.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.devshahnawaz.hospitalManagement.dto.BloodGroupCountResponseEntity;
+import com.devshahnawaz.hospitalManagement.dto.UpdatePatientRequestDto;
 import com.devshahnawaz.hospitalManagement.entity.Patient;
+import com.devshahnawaz.hospitalManagement.entity.type.BloodGroupType;
 import com.devshahnawaz.hospitalManagement.repository.PatientRepository;
 
 import jakarta.transaction.Transactional;
@@ -64,6 +71,76 @@ public class PatientService {
         p1.setName("yoyo");
 
         return p1;
+    }
+
+    @Transactional
+    public List<Patient> getAllPatients() {
+        return patientRepository.findAll();
+    }
+
+    @Transactional
+    public Page<Patient> getAllPatientsPaginated(Pageable pageable) {
+        return patientRepository.findAllPatients(pageable);
+    }
+
+    @Transactional
+    public Patient getPatient(Long id) {
+        return patientRepository.findById(id).orElseThrow(() -> 
+            new RuntimeException("Patient not found with id: " + id));
+    }
+
+    @Transactional
+    public Patient createPatient(Patient patient) {
+        return patientRepository.save(patient);
+    }
+
+    @Transactional
+    public Patient updatePatient(Long id, UpdatePatientRequestDto dto) {
+        Patient patient = patientRepository.findById(id).orElseThrow(() -> 
+            new RuntimeException("Patient not found with id: " + id));
+
+        if (dto.getName() != null) {
+            patient.setName(dto.getName());
+        }
+        if (dto.getBirthDate() != null) {
+            patient.setBirthDate(dto.getBirthDate());
+        }
+        if (dto.getEmail() != null) {
+            patient.setEmail(dto.getEmail());
+        }
+        if (dto.getGender() != null) {
+            patient.setGender(dto.getGender());
+        }
+        if (dto.getBloodGroup() != null) {
+            patient.setBloodGroup(dto.getBloodGroup());
+        }
+
+        return patientRepository.save(patient);
+    }
+
+    @Transactional
+    public void deletePatient(Long id) {
+        patientRepository.deleteById(id);
+    }
+
+    @Transactional
+    public List<Patient> searchPatientsByName(String query) {
+        return patientRepository.findByNameContainingOrderByIdDesc(query);
+    }
+
+    @Transactional
+    public List<Patient> getPatientsByBloodGroup(BloodGroupType bloodGroup) {
+        return patientRepository.findByBloodGroup(bloodGroup);
+    }
+
+    @Transactional
+    public List<BloodGroupCountResponseEntity> getBloodGroupCounts() {
+        return patientRepository.countEachBloodGroupType();
+    }
+
+    @Transactional
+    public List<Patient> getAllPatientsWithAppointments() {
+        return patientRepository.findAllPatientWithAppointment();
     }
 
 }

@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.devshahnawaz.hospitalManagement.entity.Appointment;
 import com.devshahnawaz.hospitalManagement.entity.Insurance;
 import com.devshahnawaz.hospitalManagement.entity.Patient;
-import com.devshahnawaz.hospitalManagement.service.AppoinmentService;
+import com.devshahnawaz.hospitalManagement.service.AppointmentService;
 import com.devshahnawaz.hospitalManagement.service.InsuranceService;
 
 @SpringBootTest
@@ -20,7 +19,7 @@ public class InsuranceTests {
     private InsuranceService insuranceService;
 
     @Autowired
-    private AppoinmentService appointmeService;
+    private AppointmentService appointmentService;
 
     @Test
     public void testInsurance() {
@@ -41,16 +40,17 @@ public class InsuranceTests {
 
     @Test
     public void testCreateAppoinment() {
-        Appointment appointment = Appointment.builder()
-                .appointmentTime(LocalDateTime.of(2025, 11, 1, 14, 0, 0))
-                .reason("Cancer")
-                .build();
+        var createAppointmentDto = new com.devshahnawaz.hospitalManagement.dto.CreateAppointmentRequestDto();
+        createAppointmentDto.setAppointmentTime(LocalDateTime.of(2025, 11, 1, 14, 0, 0));
+        createAppointmentDto.setReason("Cancer");
+        createAppointmentDto.setPatientId(1L);
+        createAppointmentDto.setDoctorId(2L);
 
-        var newAppointment = appointmeService.createNewAppointment(appointment, 1L, 2L);
+        var newAppointment = appointmentService.createNewAppointment(createAppointmentDto);
 
         System.out.println(newAppointment);
 
-        var updatedAppointment = appointmeService.reAssignAppointmentToAnotherDoctor(newAppointment.getId(), 3L);
+        var updatedAppointment = appointmentService.reAssignAppointmentToAnotherDoctor(newAppointment.getId(), 3L);
 
         System.out.println(updatedAppointment);
     }
