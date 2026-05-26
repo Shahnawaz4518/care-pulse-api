@@ -23,3 +23,14 @@ VALUES
     ('Dr. Sneha Gupta', 'Dermatology', 'snehaGupta@email.com'),
     ('Dr. Amit Sharma', 'Neurology', 'amitSharma@email.com'),
     ('Dr. Virat Kohli', 'Orthopaedics', 'viratKohli@email.com');
+
+
+INSERT INTO appointment (appointment_time, reason, doctor_id, patient_id)
+VALUES
+    ('2025-11-01 14:00:00', 'Cancer', 1, 1),
+    ('2025-11-02 15:00:00', 'Fever', 2, 2),
+    ('2025-11-03 16:00:00', 'Headache', 3, 3),
+    ('2025-11-04 17:00:00', 'Back Pain', 4, 4),
+    ('2025-11-05 18:00:00', 'Flu', 2, 3),
+    ('2025-11-06 19:00:00', 'Maleria', 4, 5),
+    ('2025-11-07 20:00:00', 'Diabetes', 1, 7);

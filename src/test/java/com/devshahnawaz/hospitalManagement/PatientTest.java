@@ -46,11 +46,11 @@ public class PatientTest {
 
         // JPA: save() → INSERT INTO patient (...) VALUES (...)
         // We build a valid Patient to avoid NOT NULL constraint violations.
-        Patient p1 = new Patient();
-        p1.setName("Test Patient");
-        p1.setEmail("test.patient@gmail.com");
-        patientRepository.save(p1);
-        System.out.println("Saved: " + p1);
+        // Patient p1 = new Patient();
+        // p1.setName("Test Patient");
+        // p1.setEmail("test.patient@gmail.com");
+        // patientRepository.save(p1);
+        // System.out.println("Saved: " + p1);
     }
 
     // ─────────────────────────────────────────────────────────────
@@ -108,7 +108,7 @@ public class PatientTest {
         // ── Native SQL Query (nativeQuery = true) ─────────────────
         // Raw SQL against actual table name "patient", with pagination.
         // NATIVE: SELECT * FROM patient (page 0, 2 records per page)
-        Page<Patient> patients = patientRepository.findAllPatients(PageRequest.of(1, 2,Sort.by("name")));
+        Page<Patient> patients = patientRepository.findAllPatients(PageRequest.of(1, 2, Sort.by("name")));
         for (Patient patient : patients) {
             System.out.println(patient);
         }

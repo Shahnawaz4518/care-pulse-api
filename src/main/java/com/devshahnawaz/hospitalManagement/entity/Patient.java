@@ -15,6 +15,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity; // Marks this class as a JPA entity (mapped to a DB table)
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated; // Maps Java enum to DB column
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id; // Marks the primary key field
@@ -103,8 +104,8 @@ public class Patient {
         @JoinColumn(name = "patient_insurance_id")
         private Insurance insurance;
 
-        @OneToMany(mappedBy = "patient", cascade = { CascadeType.REMOVE })
-        @ToString.Exclude
+        @OneToMany(mappedBy = "patient", cascade = {
+                        CascadeType.REMOVE }, orphanRemoval = true, fetch = FetchType.EAGER)
         private List<Appointment> appointments = new ArrayList<>();
 
 }
