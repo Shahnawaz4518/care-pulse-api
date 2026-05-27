@@ -29,7 +29,7 @@ import com.devshahnawaz.hospitalManagement.service.PatientService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/patients")
+@RequestMapping("/patients")
 @RequiredArgsConstructor
 public class PatientController {
 
