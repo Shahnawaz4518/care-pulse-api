@@ -1,7 +1,13 @@
 package com.devshahnawaz.hospitalManagement.service;
 
 import com.devshahnawaz.hospitalManagement.dto.DoctorResponseDto;
+import com.devshahnawaz.hospitalManagement.dto.OnboardDoctorRequestDto;
+import com.devshahnawaz.hospitalManagement.entity.Doctor;
+import com.devshahnawaz.hospitalManagement.entity.User;
+import com.devshahnawaz.hospitalManagement.entity.type.RoleType;
 import com.devshahnawaz.hospitalManagement.repository.DoctorRepository;
+import com.devshahnawaz.hospitalManagement.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -17,6 +23,7 @@ public class DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     public List<DoctorResponseDto> getAllDoctors() {
         return doctorRepository.findAll()
@@ -25,4 +32,23 @@ public class DoctorService {
                 .collect(Collectors.toList());
     }
 
+
+    @Transactional
+    public DoctorResponseDto onBoardNewDoctor(OnboardDoctorRequestDto onBoardDoctorRequestDto) {
+        User user = userRepository.findById(onBoardDoctorRequestDto.getUserId()).orElseThrow();
+
+        if(doctorRepository.existsById(onBoardDoctorRequestDto.getUserId())) {
+            throw new IllegalArgumentException("Already a doctor");
+        }
+
+        Doctor doctor = Doctor.builder()
+                .name(onBoardDoctorRequestDto.getName())
+                .specialization(onBoardDoctorRequestDto.getSpecialization())
+                .user(user)
+                .build();
+
+        user.getRoles().add(RoleType.DOCTOR);
+
+        return modelMapper.map(doctorRepository.save(doctor), DoctorResponseDto.class);
+    }
 }
